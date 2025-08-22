@@ -91,7 +91,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -698,8 +698,44 @@ require('lazy').setup({
             },
           },
         },
+        texlab = {
+        --     on_init = function(client)
+        --       local cfg = client.config.settings or {}
+        --       cfg.texlab = cfg.texlab or {}
+        --       cfg.texlab.chktex = vim.tbl_deep_extend('force', cfg.texlab.chktex or {}, { onOpenAndSave = true, onEdit = false })
+        --       -- push the (possibly updated) settings to the server
+        --       client.notify('workspace/didChangeConfiguration', { settings = cfg })
+        --       client.config.settings = cfg
+        --     end,
+        settings = {
+        texlab = {
+        auxDirectory = 'build', -- or ".", or ".aux"
+        rootDirectory = nil, -- auto-detects; see note below on %!TEX root
+        diagnosticsDelay = 300,
+        
+        build = {
+        executable = 'latexmk',
+        args = { '-pdf', '-interaction=nonstopmode', '-synctex=1', '%f' },
+        onSave = false, -- <— trigger build on save so diagnostics appear
+        forwardSearchAfter = false,
+        },
+        
+        chktex = {
+        onOpenAndSave = true,
+        onEdit = false,
+        },
+        
+        latexFormatter = 'latexindent', -- optional
+        formatterLineLength = 80,
+        },
+        },
+        
+       filetypes = { 'tex', 'plaintex', 'bib' },
+        },
+        ltex = { settings = { ltex = { language = 'en-US' } }, filetypes = { 'tex', 'latex', 'markdown' } },
       }
-
+        
+      --
       -- Ensure the servers and tools above are installed
       --
       -- To check the current status of installed tools and/or manually install
@@ -894,7 +930,7 @@ require('lazy').setup({
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
+      vim.cmd.colorscheme 'torte'
     end,
   },
 
@@ -949,6 +985,7 @@ require('lazy').setup({
       auto_install = true,
       highlight = {
         enable = true,
+        disable = { 'latex' },
         -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
         --  If you are experiencing weird indenting issues, add the language to
         --  the list of additional_vim_regex_highlighting and disabled languages for indent.
@@ -984,7 +1021,7 @@ require('lazy').setup({
   --    This is the easiest way to modularize your config.
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!

@@ -1,0 +1,8 @@
+local servers = {
+  -- …existing servers…
+  ltex = {
+    settings = { ltex = { language = 'en-US' } },
+    filetypes = { 'tex', 'latex', 'markdown' },
+  },
+  texlab = {}, -- optional
+}
